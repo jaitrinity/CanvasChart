@@ -1,0 +1,318 @@
+<!-- <mat-tab-group [color]="tabColor" [backgroundColor]="tabBackground" [selectedIndex] = 2> -->
+<mat-tab-group mat-align-tabs="start" [color]="tabColor" [backgroundColor]="tabBackground">
+    <mat-tab label="Incident Graph">
+        <ng-template matTabContent>
+            <div class="graph">
+                <div class="graph-in">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="graph-name">Incident Management Graph</span>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control my-select">
+                                <option>Aug-2022</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control my-select">
+                                <option>Fiber Cut</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 graph-main-div">
+                            <div class="graph-div">
+                                <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+                            </div>
+                        </div>
+                        <div class="col-md-4 graph-main-div">
+                            <div class="table-div">
+                                <div class="table-row">
+                                    <div class="a head">Circle</div> <div class="a head">Fiber Cut</div>
+                                </div>
+                                <div class="table-row">
+                                    <div class="a">Delhi</div> <div class="a">2</div>
+                                </div>
+                                <div class="table-row">
+                                    <div class="a">Circle</div> <div class="a">Fiber Cut</div>
+                                </div>
+                                <div class="table-row">
+                                    <div class="a">Circle</div> <div class="a">Fiber Cut</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="graph-name">Fiber Cut Incident</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <canvasjs-chart [options]="chartOptions4"></canvasjs-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">MTTR of Fiber Cut</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select">
+                                        <option>Aug-2022</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <canvasjs-chart [options]="chartOptions4"></canvasjs-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </ng-template>
+        
+    </mat-tab>
+    <mat-tab label="PM Graph">
+        <ng-template matTabContent>
+            <div class="row">
+                <div class="col-md-12" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in" style="background-color: #f7f8ff">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <span class="graph-name">Punchpoint</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select">
+                                        <option>JAS (Q2)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="punchpoint-div">
+                                        <div class="punchpoint" [ngStyle]="{'border-bottom': pn.color ?  '3px solid '+pn.color : '2px solid red'}" *ngFor="let pn of punchpointList">
+                                            <div class="pn-no">{{pn.number}}</div>
+                                            <div class="pn-cir">{{pn.circle}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Weekly PM</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select">
+                                        <option>JAS (Q2)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvasjs-chart [options]="chartOptions3"></canvasjs-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Metro & Airpost site PM</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select">
+                                        <option>JAS (Q2)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvasjs-chart [options]="chartOptions1"></canvasjs-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Metro & Airpost site PM 2</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select">
+                                        <option>JAS (Q2)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvasjs-chart [options]="chartOptions2"></canvasjs-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding: 0px;">
+                </div>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Training Graph">
+        <ng-template matTabContent>
+            <div class="row">
+                <div class="col-md-12 pd-0">
+                    <div class="graph">
+                        <div class="graph-in" style="background: #f7f8ff;">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row pd-0">
+                                        <div class="col-md-12 pd-0">
+                                            <span class="graph-name">Training Graph</span>
+                                        </div>
+                                    </div>
+                                    <div class="row pd-0">
+                                        <div class="col-md-12 pd-0">
+                                            <div class="flex-div">
+                                                <div class="my-card" *ngFor="let t of trainingList">
+                                                    <div class="percent">
+                                                        <svg>
+                                                            <circle cx="54" cy="54" r="25"></circle>
+                                                            <circle cx="54" cy="54" r="25" style="--percent: {{t.percentage}}"></circle>
+                                                        </svg>
+                                                        <div class="number">
+                                                            <h4>{{t.percentage}}<span>%</span></h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="title">
+                                                        <h3 [class] = "t.type">{{t.count}} - {{t.type}}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row pd-0" >
+                                        <div class="col-md-6">
+                                            <select class="form-control my-select">
+                                                <option>Coselignt</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <select class="form-control my-select">
+                                                <option>APTL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row pd-0">
+                                        <div class="col-md-12">
+                                            <div class="table-div">
+                                                <div class="table-row">
+                                                    <div class="a head">Emp Name</div> 
+                                                    <div class="a head">Status</div>
+                                                    <div class="a head">Percentage</div>
+                                                </div>
+                                                <div class="table-row" *ngFor="let te of trainingEmpList">
+                                                    <div class="a">{{te.name}}</div> 
+                                                    <div class="a">{{te.status}}</div>
+                                                    <div class="a">{{te.percentage}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="graph">
+                    <div class="graph-in">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <span class="graph-name">Training Question</span>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control my-select">
+                                    <option>Coselignt</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-div">
+                                <div class="table-row">
+                                    <div class="a head">Question</div> 
+                                    <div class="a head"></div>
+                                    <div class="a head">Correct %</div>
+                                    <div class="a head">Incorrect %</div>
+                                </div>
+                                <div class="table-row" *ngFor="let qt of questionList">
+                                    <div class="a">{{qt.question}}</div>
+                                    <div class="a">
+                                        <div class="w3-light-grey w3-round-xlarge">
+                                            <div class="w3-container w3-green w3-round-xlarge" [ngStyle]="{'width': qt.correctPercent}">{{qt.correctPercent}}</div>
+                                        </div>
+                                    </div> 
+                                    <div class="a">{{qt.correctPercent}}</div>
+                                    <div class="a">{{qt.incorrectPercent}}</div>
+                                </div>
+                            </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </ng-template>
+    </mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled>
+        <ng-template mat-tab-label>
+            <select class="form-control my-select">
+                <option>2022-23</option>
+            </select>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

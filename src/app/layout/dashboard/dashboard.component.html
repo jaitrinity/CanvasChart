@@ -1,0 +1,606 @@
+<mat-tab-group mat-align-tabs="start" [color]="tabColor" [backgroundColor]="tabBackground">
+    <mat-tab label="Incident Graph">
+        <ng-template matTabContent>
+            <div class="graph">
+                <div class="graph-in">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="graph-name">Incident Management Graph</span>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control my-select" [(ngModel)]="monthYear1" (change)="generateInciGraphMonthWise(monthYear1)">
+                                <option value="" [disabled]=true>Select</option>
+                                <option *ngFor="let ml of monthList" value="{{ml.paramCode}}">{{ml.paramDesc}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control my-select" [(ngModel)]="incidentCategory1" (change)="generateGraph1()">
+                                <option value="" [disabled]=true>Select</option>
+                                <option *ngFor="let ic of incidentCategoryList" value="{{ic.paramCode}}">{{ic.paramDesc}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 graph-main-div">
+                            <div class="graph-div">
+                                <div class="col-md-12 text-center" *ngIf="!isIMG">
+                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    <h5 class="text-warning">Please wait...</h5>
+                                </div>
+                                <canvasjs-chart [options]="chartIMG" *ngIf="isIMG"></canvasjs-chart>
+                                <div class="col-md-12 text-right" *ngIf="isIMG">
+                                    <mat-icon class="mat-download" (click)="downloadGraphReport(1)">download</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 graph-main-div">
+                            <div class="table-div">
+                                <div class="tb-head">
+                                    <div class="table-row">
+                                        <div class="a head" *ngFor="let tc of tableColumn">{{tc}}</div> 
+                                    </div>
+                                </div>
+                                <div class="tb-body">
+                                    <div class="table-row" *ngFor="let dp of dataPoints">
+                                        <div class="a">{{dp.label}}</div> <div class="a">{{dp.y}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            
+            <div class="row" *ngIf="isFiberCut">
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="graph-name">Fiber Cut Incident</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isFCI">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartFCI" *ngIf="isFCI"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isFCI">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(3)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">MTTR of Fiber Cut</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="monthYear3" (change)="generateInciGraphMonthWise(monthYear3)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option *ngFor="let ml of monthList" value="{{ml.paramCode}}">{{ml.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isMFC">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartMFC" *ngIf="isMFC"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isMFC">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(3)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="row" *ngIf="isFiberCut">
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Frequent Failing Fiber Cut Circle Wise</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="quarter5" (change)="generateInciGraphQuarterWise(quarter5)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isFFFCCW">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartFFFCCW" *ngIf="isFFFCCW"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isFFFCCW">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(2)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Frequent Failing Fiber Cut Site Wise</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="quarter6" (change)="generateInciGraphQuarterWise(quarter6)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="table-div">
+                                        <div class="tb-head">
+                                            <div class="table-row">
+                                                <div class="a head" *ngFor="let tc of tableColumnFFFCSW">{{tc}}</div> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tb-body">
+                                            <div class="table-row" *ngFor="let dp of tableDataFFFCSW">
+                                                <div class="a">{{dp.circle}}</div> 
+                                                <div class="a">{{dp.siteId}}</div>
+                                                <div class="a">{{dp.repeatCount}}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        
+    </mat-tab>
+    <mat-tab label="PM Graph">
+        <ng-template matTabContent>
+            <div class="row">
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Preventive Maintenance - {{pmPercentage}} %</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="quarter" (change)="generateAllPMGraph(quarter)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isPM">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartPM" *ngIf="isPM"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isPM">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(4)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Site Type Wise PM - {{pmPercentage1}} %</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="quarter1" (change)="generateAllPMGraph(quarter1)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="siteType" (change)="generateGraph5()">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option *ngFor="let st of siteTypeList" value="{{st.paramCode}}">{{st.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isSTWPM">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartSTWPM" *ngIf="isSTWPM"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isSTWPM">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(5)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in" style="background-color: #f7f8ff">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <span class="graph-name">PM Punchpoint</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="quarter2" (change)="generateAllPMGraph(quarter2)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="punchpoint-div">
+                                        <div class="punchpoint" [ngStyle]="{'border-bottom': pn.color ?  '3px solid '+pn.color : '2px solid red'}" *ngFor="let pn of punchpointList">
+                                            <div class="pn-no">{{pn.punchpoint}}</div>
+                                            <div class="pn-cir">{{pn.state}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <mat-icon class="mat-download" (click)="downloadGraphReport(8)">download</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Weekly PM</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="quarter3" (change)="generateAllPMGraph(quarter3)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isWPM">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartWPM" *ngIf="isWPM"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isWPM">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(7)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding: 0px;">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Metro And Airport Sites PM 2</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control my-select" [(ngModel)]="quarter7" (change)="generateAllPMGraph(quarter7)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isMASPM2">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartMASPM2" *ngIf="isMASPM2"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isMASPM2">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(11)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="graph-name">Metro And Airport Sites PM</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="metroSiteType" (change)="generateGraph6()">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option *ngFor="let st of metroSiteTypeList" value="{{st.paramCode}}">{{st.paramDesc}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="quarter4" (change)="generateAllPMGraph(quarter4)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option value="{{ql.paramCode}}" *ngFor="let ql of quarterList">{{ql.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isMASPM">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartMASPM" *ngIf="isMASPM"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isMASPM">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(6)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="graph-name">Metro And Airport Sites PM 3</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="table-div">
+                                        <div class="tb-head">
+                                            <div class="table-row">
+                                                <div class="a head">Site Id</div> 
+                                                <div class="a head">Status</div> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tb-body">
+                                            <div class="table-row" *ngFor="let dp of tableDataMASPM3" [ngClass]="{'not-done' : dp.status == 'Not Done'}">
+                                                <div class="a">{{dp.siteId}}</div> 
+                                                <div class="a">{{dp.status}}</div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-right">
+                                    <mat-icon class="mat-download" (click)="downloadGraphReport(13)">download</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Training Graph">
+        <ng-template matTabContent>
+            <div class="row">
+                <div class="col-md-12 pd-0">
+                    <div class="graph">
+                        <div class="graph-in">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <span class="graph-name">Training Graph</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-control my-select" [(ngModel)]="trainingName" (change)="generateAllTrainingGraph(trainingName)">
+                                        <option value="" [disabled]=true>Select</option>
+                                        <option *ngFor="let tn of trainingNameList" value="{{tn.paramCode}}">{{tn.paramDesc}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 graph-main-div">
+                                    <div class="graph-div">
+                                        <div class="col-md-12 text-center" *ngIf="!isTG">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                            <h5 class="text-warning">Please wait...</h5>
+                                        </div>
+                                        <canvasjs-chart [options]="chartTG" *ngIf="isTG"></canvasjs-chart>
+                                        <div class="col-md-12 text-right" *ngIf="isTG">
+                                            <mat-icon class="mat-download" (click)="downloadGraphReport(10)">download</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pd-0">
+                    <div class="graph">
+                        <div class="graph-in" style="background: #f7f8ff;">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row pd-0">
+                                        <div class="col-md-12 pd-0">
+                                            <span class="graph-name">Training Graph 2</span>
+                                        </div>
+                                    </div>
+                                    <div class="row pd-0">
+                                        <div class="col-md-12 pd-0">
+                                            <div class="flex-div">
+                                                <div class="my-card" *ngFor="let t of trainingResultList">
+                                                    <div class="percent">
+                                                        <svg>
+                                                            <circle cx="54" cy="54" r="25"></circle>
+                                                            <circle cx="54" cy="54" r="25" style="--percent: {{t.percentage}}"></circle>
+                                                        </svg>
+                                                        <div class="number">
+                                                            <h4>{{t.percentage}}<span>%</span></h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="title">
+                                                        <h3 [class] = "t.type">{{t.count}} - {{t.type}}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row pd-0" >
+                                        <div class="col-md-6">
+                                            <select class="form-control my-select" [(ngModel)]="trainingName2" (change)="generateAllTrainingGraph(trainingName2)">
+                                                <option value="" [disabled]=true>Select</option>
+                                                <option *ngFor="let tn of trainingNameList" value="{{tn.paramCode}}">{{tn.paramDesc}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <select class="form-control my-select" [(ngModel)]="state" (change)="generateGraph12()">
+                                                <option value="" [disabled]=true>Select</option>
+                                                <option *ngFor="let st of stateList" value="{{st.paramCode}}">{{st.paramDesc}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row pd-0">
+                                        <div class="col-md-12">
+                                            <div class="table-div">
+                                                <div class="tb-head">
+                                                    <div class="table-row">
+                                                        <div class="a head">Emp Name</div> 
+                                                        <div class="a head">Status</div>
+                                                        <div class="a head">Percentage</div>
+                                                    </div>
+                                                </div>
+                                                <div class="tb-body">
+                                                    <div class="table-row" *ngFor="let te of trainingEmpList">
+                                                        <div class="a">{{te.name}}</div> 
+                                                        <div class="a">{{te.status}}</div>
+                                                        <div class="a">{{te.percentage}}</div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="graph">
+                    <div class="graph-in">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <span class="graph-name">Training Question</span>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control my-select" [(ngModel)]="trainingName" (change)="generateAllTrainingGraph(trainingName)">
+                                    <option value="" [disabled]=true>Select</option>
+                                    <option *ngFor="let tn of trainingNameList" value="{{tn.paramCode}}">{{tn.paramDesc}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-div">
+                                    <div class="tb-head">
+                                        <div class="table-row">
+                                            <div class="a head" style="width: 40%;">Question</div> 
+                                            <div class="a head" style="width: 40%;"></div>
+                                            <div class="a head" style="width: 10%;">Correct %</div>
+                                            <div class="a head" style="width: 10%;">Incorrect %</div>
+                                        </div>
+                                    </div>
+                                    <div class="tb-body">
+                                        <div class="table-row" *ngFor="let qt of questionList">
+                                            <div class="a" style="width: 40%;">{{qt.question}}</div>
+                                            <div class="a" style="width: 40%;">
+                                                <div class="w3-light-grey w3-round-xlarge">
+                                                    <div class="w3-container w3-green w3-round-xlarge" [ngStyle]="{'width': qt.correctPercent}">{{qt.correctPercent}}</div>
+                                                </div>
+                                            </div> 
+                                            <div class="a" style="width: 10%;">{{qt.correctPercent}}</div>
+                                            <div class="a" style="width: 10%;">{{qt.incorrectPercent}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-right">
+                                <mat-icon class="mat-download" (click)="downloadGraphReport(14)">download</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </ng-template>
+    </mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled></mat-tab>
+    <mat-tab disabled>
+        <ng-template mat-tab-label>
+            <select class="form-control my-select" [(ngModel)]="financialYear" (change)="selectFinancialYear()">
+                <option value="" [disabled]=true>Select</option>
+                <option *ngFor="let fn of financialYearList">{{fn}}</option>
+            </select>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>
