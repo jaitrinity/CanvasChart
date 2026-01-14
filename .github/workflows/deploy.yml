@@ -36,5 +36,5 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/canvaschart:latest
           docker stop canvaschart || true
           docker rm canvaschart || true
-          docker run -d -p 80:80 --name canvaschart \
+          docker run -d -p 8080:80 --name canvaschart \
             ${{ secrets.DOCKER_USERNAME }}/canvaschart:latest
